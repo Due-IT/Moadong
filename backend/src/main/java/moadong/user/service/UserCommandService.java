@@ -2,9 +2,6 @@ package moadong.user.service;
 
 import com.mongodb.MongoWriteException;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Date;
-
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import moadong.club.entity.Club;
 import moadong.club.repository.ClubRepository;
@@ -31,6 +28,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class UserCommandService {
@@ -43,7 +42,6 @@ public class UserCommandService {
     private final CookieMaker cookieMaker;
     private final SecurePasswordGenerator securePasswordGenerator;
 
-    @Transactional
     public User registerUser(UserRegisterRequest userRegisterRequest) {
         String userId = new ObjectId().toHexString();
         String clubId = new ObjectId().toHexString();

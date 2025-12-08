@@ -1,8 +1,5 @@
 package moadong.club.entity;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -20,12 +17,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder(toBuilder = true)
 public class ClubApplicant {
 
-    @Id
     private String id;
 
     private String formId;
 
-    @Enumerated(EnumType.STRING)
     @Builder.Default
     ApplicantStatus status = ApplicantStatus.SUBMITTED;
 

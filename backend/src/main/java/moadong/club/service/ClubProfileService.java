@@ -1,8 +1,8 @@
 package moadong.club.service;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import moadong.club.entity.Club;
+import moadong.club.enums.ClubRecruitmentStatus;
 import moadong.club.payload.dto.ClubDetailedResult;
 import moadong.club.payload.dto.ClubSearchResult;
 import moadong.club.payload.request.ClubInfoRequest;
@@ -17,7 +17,8 @@ import moadong.global.util.ObjectIdConverter;
 import moadong.user.payload.CustomUserDetails;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,6 @@ public class ClubProfileService {
     private final ClubRepository clubRepository;
     private final ClubSearchRepository clubSearchRepository;
 
-    @Transactional
     public void updateClubInfo(ClubInfoRequest request, CustomUserDetails user) {
         Club club = clubRepository.findClubByUserId(user.getId())
                 .orElseThrow(() -> new RestApiException(ErrorCode.CLUB_NOT_FOUND));
@@ -58,5 +58,13 @@ public class ClubProfileService {
                 club,clubSearchResults
         );
         return new ClubDetailedResponse(clubDetailedResult);
+    }
+
+    public void updateRecruitmentStatus(String clubId, ClubRecruitmentStatus status){
+        ObjectId objectId = ObjectIdConverter.convertString(clubId);
+        Club club = clubRepository.findClubById(objectId)
+                .orElseThrow(() -> new RestApiException(ErrorCode.CLUB_NOT_FOUND));
+
+        club.updateRecruitmentStatus(status);
     }
 }

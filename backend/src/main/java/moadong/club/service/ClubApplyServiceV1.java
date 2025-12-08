@@ -1,27 +1,21 @@
 package moadong.club.service;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moadong.club.entity.*;
 import moadong.club.enums.ClubApplicationQuestionType;
-import moadong.club.enums.SemesterTerm;
-import moadong.club.payload.dto.*;
-import moadong.club.payload.request.*;
-import moadong.club.payload.response.ClubActiveFormsResponse;
-import moadong.club.payload.response.ClubApplicationFormResponse;
-import moadong.club.payload.response.ClubApplicationFormsResponse;
+import moadong.club.payload.dto.ClubApplicantsResult;
+import moadong.club.payload.request.ClubApplicantDeleteRequest;
+import moadong.club.payload.request.ClubApplicantEditRequest;
+import moadong.club.payload.request.ClubApplyRequest;
 import moadong.club.payload.response.ClubApplyInfoResponse;
 import moadong.club.repository.ClubApplicantsRepository;
 import moadong.club.repository.ClubApplicationFormsRepository;
-import moadong.club.repository.ClubApplicationFormsRepositoryCustom;
 import moadong.club.repository.ClubRepository;
 import moadong.global.exception.ErrorCode;
 import moadong.global.exception.RestApiException;
-import moadong.global.payload.Response;
 import moadong.global.util.AESCipher;
 import moadong.user.payload.CustomUserDetails;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -112,7 +106,6 @@ public class ClubApplyServiceV1 {
         return app;
     }
 
-    @Transactional
     public void editApplicantDetail(String clubId, String applicationFormId, List<ClubApplicantEditRequest> request, CustomUserDetails user) {
         validateClubOwner(clubId, user);
 
@@ -136,7 +129,6 @@ public class ClubApplyServiceV1 {
         clubApplicantsRepository.saveAll(application);
     }
 
-    @Transactional
     public void deleteApplicant(String clubId, String applicationFormId, ClubApplicantDeleteRequest request, CustomUserDetails user) {
         validateClubOwner(clubId, user);
 

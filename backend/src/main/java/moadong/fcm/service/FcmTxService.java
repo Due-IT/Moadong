@@ -1,6 +1,5 @@
 package moadong.fcm.service;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moadong.fcm.entity.FcmToken;
@@ -26,7 +25,6 @@ public class FcmTxService {
 
     private final FcmTokenRepository fcmTokenRepository;
 
-    @Transactional
     public void deleteUnregisteredFcmToken(String token) {
         fcmTokenRepository.findFcmTokenByToken(token).ifPresent(t -> {
             fcmTokenRepository.delete(t);
@@ -34,7 +32,6 @@ public class FcmTxService {
         });
     }
 
-    @Transactional
     public void updateFcmToken(String token, Set<String> newClubIds) {
         FcmToken fcmToken = fcmTokenRepository.findFcmTokenByToken(token).orElseThrow(() -> new RestApiException(ErrorCode.FCMTOKEN_NOT_FOUND));
         fcmToken.updateClubIds(newClubIds.stream().toList());

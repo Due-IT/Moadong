@@ -1,11 +1,11 @@
 package moadong.club.service;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moadong.club.entity.*;
 import moadong.club.enums.SemesterTerm;
-import moadong.club.payload.dto.*;
+import moadong.club.payload.dto.ApplicantStatusEvent;
+import moadong.club.payload.dto.ClubApplicantsResult;
 import moadong.club.payload.request.*;
 import moadong.club.payload.response.ClubApplicationFormsResponse;
 import moadong.club.payload.response.ClubApplyInfoResponse;
@@ -92,7 +92,6 @@ public class ClubApplyAdminService {
         clubApplicationFormsRepository.save(clubApplicationForm);
     }
 
-    @Transactional
     public void editClubApplication(String applicationFormId, CustomUserDetails user, ClubApplicationFormEditRequest request) {
 
         ClubApplicationForm clubApplicationForm = clubApplicationFormsRepository.findByClubIdAndId(user.getClubId(), applicationFormId)
@@ -102,7 +101,6 @@ public class ClubApplyAdminService {
         clubApplicationFormsRepository.save(updateApplicationForm(clubApplicationForm, request));
     }
 
-    @Transactional //test 사용
     public void editClubApplicationQuestion(String applicationFormId, CustomUserDetails user, ClubApplicationFormEditRequest request) {
         ClubApplicationForm clubApplicationForm = clubApplicationFormsRepository.findById(applicationFormId)
                 .orElseThrow(() -> new RestApiException(ErrorCode.APPLICATION_NOT_FOUND));
@@ -163,7 +161,6 @@ public class ClubApplyAdminService {
         return app;
     }
 
-    @Transactional
     public void editApplicantDetail(String applicationFormId, List<ClubApplicantEditRequest> request, CustomUserDetails user) {
         String clubId = user.getClubId();
 
@@ -204,7 +201,6 @@ public class ClubApplyAdminService {
         clubApplicantsRepository.saveAll(application);
     }
 
-    @Transactional
     public void deleteApplicant(String applicationFormId, ClubApplicantDeleteRequest request, CustomUserDetails user) {
         List<ClubApplicant> applicants = clubApplicantsRepository.findAllByIdInAndFormId(request.applicantIds(), applicationFormId);
 

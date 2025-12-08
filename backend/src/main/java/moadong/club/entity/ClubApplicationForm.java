@@ -1,21 +1,20 @@
 package moadong.club.entity;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import moadong.club.enums.ApplicantStatus;
 import moadong.club.enums.ApplicationFormStatus;
 import moadong.club.enums.SemesterTerm;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document("club_application_forms")
 @AllArgsConstructor
@@ -23,7 +22,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder(toBuilder = true)
 public class ClubApplicationForm implements Persistable<String> {
 
-    @Id
     private String id;
 
     private String clubId;

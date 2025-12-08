@@ -1,7 +1,5 @@
 package moadong.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,14 +8,12 @@ import lombok.NoArgsConstructor;
 import moadong.global.annotation.Korean;
 import moadong.global.annotation.PhoneNumber;
 
-@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInformation {
 
-    @Id
     private String id;
 
     @NotNull

@@ -1,7 +1,5 @@
 package moadong.club.entity;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,7 +21,6 @@ public class ClubApplicationFormQuestion {
     @NotNull
     private String description;
 
-    @Enumerated(EnumType.STRING)
     @NotNull
     private ClubApplicationQuestionType type;
 
