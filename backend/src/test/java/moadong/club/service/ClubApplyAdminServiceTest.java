@@ -91,7 +91,7 @@ public class ClubApplyAdminServiceTest {
         // GIVEN
         int numberOfThreads = 3;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numeberOfThreads);
         // --- 핵심 추가: CyclicBarrier ---
         CyclicBarrier barrier = new CyclicBarrier(numberOfThreads);
 

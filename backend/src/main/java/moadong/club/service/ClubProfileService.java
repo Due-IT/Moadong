@@ -10,7 +10,7 @@ import moadong.club.payload.request.ClubRecruitmentInfoUpdateRequest;
 import moadong.club.payload.response.ClubDetailedResponse;
 import moadong.club.repository.ClubRepository;
 import moadong.club.repository.ClubSearchRepository;
-import moadong.club.util.RecruitmentStateCalculator;
+import moadong.club.scheduler.RecruitStatusSchedulerManager;
 import moadong.global.exception.ErrorCode;
 import moadong.global.exception.RestApiException;
 import moadong.global.util.ObjectIdConverter;
@@ -18,6 +18,8 @@ import moadong.user.payload.CustomUserDetails;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -26,6 +28,7 @@ public class ClubProfileService {
 
     private final ClubRepository clubRepository;
     private final ClubSearchRepository clubSearchRepository;
+    private final RecruitStatusSchedulerManager recruitStatusSchedulerManager;
 
     public void updateClubInfo(ClubInfoRequest request, CustomUserDetails user) {
         Club club = clubRepository.findClubByUserId(user.getId())
@@ -39,11 +42,15 @@ public class ClubProfileService {
         Club club = clubRepository.findClubByUserId(user.getId())
             .orElseThrow(() -> new RestApiException(ErrorCode.CLUB_NOT_FOUND));
         club.update(request);
-        RecruitmentStateCalculator.calculate(
-                club,
-                club.getClubRecruitmentInformation().getRecruitmentStart(),
-                club.getClubRecruitmentInformation().getRecruitmentEnd()
+
+        recruitStatusSchedulerManager.rescheduleRecruitmentUpdates(
+            club.getId(),
+            ZonedDateTime.now(ZoneId.of("Asia/Seoul")),
+            club.getClubRecruitmentInformation().getRecruitmentStart(),
+            club.getClubRecruitmentInformation().getRecruitmentEnd(),
+            14
         );
+
         clubRepository.save(club);
     }
 

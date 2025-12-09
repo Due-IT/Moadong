@@ -1,23 +1,22 @@
 package moadong.club.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import moadong.club.enums.ClubRecruitmentStatus;
+import moadong.club.enums.UpcomingBefore;
 import moadong.club.payload.request.ClubInfoRequest;
 import moadong.club.payload.request.ClubRecruitmentInfoUpdateRequest;
 import moadong.global.RegexConstants;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.springframework.data.annotation.Id;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -27,25 +26,19 @@ public class ClubRecruitmentInformation {
     @Id
     private String id;
 
-    @Column(length = 1024)
     @Unique
     private String logo;
 
-    @Column(length = 1024)
     @Unique
     private String cover;
 
-    @Column(length = 30)
     private String introduction;
 
-    @Column(length = 20000)
     private String description;
 
-    @Column(length = 5)
     private String presidentName;
 
     @Pattern(regexp = RegexConstants.PHONE_NUMBER, message = "전화번호 형식이 올바르지 않습니다.")
-    @Column(length = 13)
     private String presidentTelephoneNumber;
 
     private LocalDateTime recruitmentStart;
@@ -62,16 +55,11 @@ public class ClubRecruitmentInformation {
 
     private List<Faq> faqs;
 
-    @Enumerated(EnumType.STRING)
     @NotNull
     private ClubRecruitmentStatus clubRecruitmentStatus;
 
     public void updateLogo(String logo) {
         this.logo = logo;
-    }
-
-    public void updateRecruitmentStatus(ClubRecruitmentStatus status) {
-        this.clubRecruitmentStatus = status;
     }
 
     public void updateDescription(ClubRecruitmentInfoUpdateRequest request) {
@@ -81,6 +69,29 @@ public class ClubRecruitmentInformation {
         this.recruitmentTarget = request.recruitmentTarget();
         this.externalApplicationUrl = request.externalApplicationUrl();
         this.faqs = request.faqs();
+        
+        updateRecruitmentStatus();
+    }
+
+    public void updateRecruitmentStatus(ClubRecruitmentStatus status) {
+        this.clubRecruitmentStatus = status;
+    }
+
+    protected void updateRecruitmentStatus() {
+        LocalDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        LocalDateTime upcomingDate = recruitmentStart.minusDays(UpcomingBefore.get());
+
+
+
+        if(now.isBefore(upcomingDate)) {
+            updateRecruitmentStatus(ClubRecruitmentStatus.CLOSED);
+        } else if(now.isEqual(upcomingDate) || (now.isAfter(upcomingDate) && now.isBefore(recruitmentStart))){
+            updateRecruitmentStatus(ClubRecruitmentStatus.UPCOMING);
+        } else if(now.isEqual(recruitmentStart) || (now.isAfter(recruitmentStart) && now.isBefore(recruitmentEnd))) {
+            updateRecruitmentStatus(ClubRecruitmentStatus.OPEN);
+        } else if(now.isEqual(recruitmentEnd) || now.isAfter(recruitmentEnd)){
+            updateRecruitmentStatus(ClubRecruitmentStatus.CLOSED);
+        }
     }
 
     public boolean hasRecruitmentPeriod() {
