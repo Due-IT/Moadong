@@ -3,6 +3,7 @@ package moadong.club.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import moadong.club.payload.request.ClubInfoRequest;
 import moadong.club.payload.request.ClubRecruitmentInfoUpdateRequest;
@@ -14,12 +15,7 @@ import moadong.user.payload.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/club")
@@ -55,7 +51,7 @@ public class ClubProfileController {
     @SecurityRequirement(name = "BearerAuth")
     public ResponseEntity<?> updateClubRecruitmentInfo(
         @CurrentUser CustomUserDetails user,
-        @RequestBody ClubRecruitmentInfoUpdateRequest request) {
+        @Valid @RequestBody ClubRecruitmentInfoUpdateRequest request) {
         clubProfileService.updateClubRecruitmentInfo(request, user);
         return Response.ok("success update club");
     }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
+    //모집정보 관련 예외 (동아리 담당자에 의해 발생)
     CONCURRENCY_CONFLICT(HttpStatus.CONFLICT, "100-1","다른 사용자가 먼저 수정했습니다. 페이지를 새로고침 후 다시 이용해주세요"),
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "600-1", "동아리가 존재하지 않습니다."),
     CLUB_INFORMATION_NOT_FOUND(HttpStatus.NOT_FOUND, "600-2", "동아리 상세 정보가 존재하지 않습니다."),
@@ -16,6 +17,8 @@ public enum ErrorCode {
     TOO_MANY_TAGS(HttpStatus.BAD_REQUEST, "600-8", "태그는 최대 3개까지 입력할 수 있습니다."),
     TOO_LONG_TAG(HttpStatus.BAD_REQUEST, "600-9", "태그는 최대 5글자까지 입력할 수 있습니다."),
     TOO_LONG_INTRODUCTION(HttpStatus.BAD_REQUEST, "600-10", "소개는 최대 24글자까지 입력할 수 있습니다."),
+    ONE_PERIOD_CANNOT_BE_NULL(HttpStatus.BAD_REQUEST, "600-11", "모집시작/종료일은 동시에 하나만 null일 수 없습니다."),
+    START_SHOULD_BE_FASTER_THAN_END(HttpStatus.BAD_REQUEST, "600-12", "모집시작일은 모집종료일보다 같거나 늦을 수 없습니다."),
 
     IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "601-1", "이미지 업로드에 실패하였습니다."),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "601-2", "이미지 파일을 찾을 수 없습니다."),
@@ -37,6 +40,7 @@ public enum ErrorCode {
     PASSWORD_SAME_AS_USERID(HttpStatus.BAD_REQUEST, "702-1", "아이디와 동일한 비밀번호는 설정할 수 없습니다."),
     PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST,"702-2","이전 비밀번호와 동일한 비밀번호는 설정할 수 없습니다."),
 
+    //지원 관련 예외
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "800-1", "지원서 양식이 존재하지 않습니다."),
     SHORT_EXCEED_LENGTH(HttpStatus.BAD_REQUEST, "800-2", "단답형 최대 글자를 초과하였습니다."),
     LONG_EXCEED_LENGTH(HttpStatus.BAD_REQUEST, "800-3", "장문형 최대 글자를 초과하였습니다."),
