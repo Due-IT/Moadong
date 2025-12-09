@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import moadong.club.enums.ApplicantStatus;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("club_applicants")
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder(toBuilder = true)
 public class ClubApplicant {
 
+    @Id
     private String id;
 
     private String formId;

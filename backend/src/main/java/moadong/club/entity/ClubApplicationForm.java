@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import moadong.club.enums.ApplicationFormStatus;
 import moadong.club.enums.SemesterTerm;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class ClubApplicationForm implements Persistable<String> {
 
+    @Id
     private String id;
 
     private String clubId;
